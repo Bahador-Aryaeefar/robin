@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <h1 class="header">Round Robin Project</h1>
+
+    <div class="initial">
+      <div class="inputs">
+        <label for="quantom" class="label">Quantom</label>
+        <input type="text" class="input" placeholder="Enter quantom" />
+      </div>
+
+      <div class="add" id="add">
+        <div class="hori"></div>
+        <div class="veri"></div>
+      </div>
+    </div>
+
+    <div class="hprocess">
+      <div class="hfirst">Name</div>
+      <div class="hmid">Period</div>
+      <div class="hend">Burst time</div>
+    </div>
+
+    <div id="list"></div>
+
+    <button class="generate" id="generate">Generate</button>
+  </body>
+</html>
+
+<style>
+  body {
+    background-color: rgb(26, 26, 26);
+    padding-top: 10rem;
+    color: white;
+    padding-bottom: 10rem;
+  }
+
+  .header {
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .initial {
+    padding-inline: 15rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 5rem;
+    margin-top: 8rem;
+  }
+
+  .label {
+    font-size: 1.25rem;
+    display: block;
+    text-align: center;
+  }
+
+  .input {
+    height: 3rem;
+    width: 20rem;
+    border-radius: 3rem;
+    background-color: #272ab0;
+    outline: 0;
+    color: white;
+    font-size: 1rem;
+    border: 0;
+    padding-inline: 1rem;
+    border: solid 0.25rem white;
+    margin-top: 0.5rem;
+  }
+
+  .add {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 3rem;
+    background-color: #272ab0;
+    align-self: end;
+    position: relative;
+    cursor: pointer;
+    border: solid 0.25rem white;
+  }
+
+  .hori {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 2rem;
+    height: 0.25rem;
+    background-color: white;
+    border-radius: 0.25rem;
+  }
+
+  .veri {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 2rem;
+    height: 0.25rem;
+    background-color: white;
+    border-radius: 0.25rem;
+    transform: rotate(90deg);
+  }
+
+  .hprocess {
+    height: 3rem;
+    margin-inline: 15rem;
+    border-radius: 3rem;
+    margin-top: 2rem;
+    background-color: white;
+    color: #272ab0;
+    display: flex;
+    font-size: 1rem;
+    border: solid 0.25rem #272ab0;
+    font-weight: bold;
+  }
+
+  .hfirst {
+    width: calc(100% / 3);
+    display: flex;
+    align-items: center;
+    padding-inline: 1rem;
+  }
+
+  .hmid {
+    width: calc(100% / 3);
+    display: flex;
+    align-items: center;
+    padding-inline: 1rem;
+    border-inline: solid 0.25rem #272ab0;
+  }
+
+  .hend {
+    width: calc(100% / 3);
+    display: flex;
+    align-items: center;
+    padding-inline: 1rem;
+  }
+
+  .process {
+    position: relative;
+    height: 3rem;
+    margin-inline: 15rem;
+    border-radius: 3rem;
+    margin-top: 1rem;
+    background-color: #272ab0;
+    border: solid 0.25rem white;
+    display: flex;
+    font-size: 1rem;
+    overflow: hidden;
+  }
+
+  .first {
+    height: 100%;
+    box-sizing: border-box;
+    width: calc(100% / 3);
+    padding-inline: 1rem;
+    background-color: #272ab0;
+    color: white;
+    outline: 0;
+    border: 0;
+  }
+
+  .mid {
+    height: 100%;
+    box-sizing: border-box;
+    width: calc(100% / 3);
+    padding-inline: 1rem;
+    background-color: #272ab0;
+    border: 0;
+    border-inline: solid 0.25rem white;
+    color: white;
+    outline: 0;
+  }
+
+  .end {
+    height: 100%;
+    box-sizing: border-box;
+    width: calc(100% / 3);
+    padding-inline: 1rem;
+    background-color: #272ab0;
+    color: white;
+    outline: 0;
+    border: 0;
+  }
+
+  .delete {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 3rem;
+    background-color: #ff0000;
+    cursor: pointer;
+    border-left: solid 0.25rem white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 0.25rem;
+  }
+
+  .delete:hover {
+    background-color: #911818;
+  }
+
+  input::placeholder {
+    color: #ffffff80;
+  }
+
+  .generate {
+    height: 3rem;
+    width: 20rem;
+    border-radius: 3rem;
+    background-color: #272ab0;
+    color: white;
+    font-size: 1rem;
+    border: 0;
+    padding-inline: 1rem;
+    border: solid 0.25rem white;
+    margin-top: 2rem;
+    margin-inline: auto;
+    display: block;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  let list = [];
+  let id = 0;
+
+  document.getElementById("add").addEventListener("click", () => {
+    list.push({
+      id: id,
+      name: "",
+      period: "",
+      process: "",
+    });
+
+    let temp = `
+    <div class="process">
+      <input id="name${id}" class="first" placeholder="Enter name" />
+      <input id="period${id}" class="mid" placeholder="Enter period" />
+      <input id="burst${id}" class="end" placeholder="Enter burst time" />
+      <div class="delete">
+
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.85 9.14001L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79002C6.00002 22 5.91002 20.78 5.80002 19.21L5.15002 9.14001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.33 16.5H13.66" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9.5 12.5H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+      </div>
+    </div>
+    `;
+
+    document.getElementById("list").innerHTML += temp;
+
+    id++;
+
+    console.log(list);
+  });
+
+  document.getElementById("generate").addEventListener("click", () => {
+    let i = 0;
+    for (let item of document.getElementsByClassName("first")) {
+      list[i].name = item.value;
+      i++;
+    }
+
+    i = 0;
+    for (let item of document.getElementsByClassName("mid")) {
+      list[i].period = item.value;
+      i++;
+    }
+
+    i = 0;
+    for (let item of document.getElementsByClassName("end")) {
+      list[i].process = item.value;
+      i++;
+    }
+
+    console.log(list)
+  });
+</script>
