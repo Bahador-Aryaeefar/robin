@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
 
-  <body>
-    <h1 class="header">Round Robin Project</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
 
+<body>
+  <h1 class="header">Round Robin Project</h1>
+
+  <form autocomplete="off">
     <div class="initial">
-      <div class="inputs">
-        <label for="quantom" class="label">Quantom</label>
-        <input type="text" class="input" placeholder="Enter quantom" />
+      <div class="puts">
+        <div class="inputs">
+          <label for="quantom" class="label">Quantum Slice</label>
+          <input id="quantom" type="text" class="input" placeholder="Enter quantum slice" />
+        </div>
+        
+        <div class="inputs">
+          <label for="max" class="label">Max Time</label>
+          <input id="max" type="text" class="input" placeholder="Enter max time" value="100" />
+        </div>
       </div>
 
-      <div class="add" id="add">
+      <div class="add" onclick="add()">
         <div class="hori"></div>
         <div class="veri"></div>
       </div>
@@ -24,19 +33,180 @@
 
     <div class="hprocess">
       <div class="hfirst">Name</div>
-      <div class="hmid">Period</div>
+      <div class="hmid">Repeat Cycle</div>
       <div class="hend">Burst time</div>
     </div>
 
     <div id="list"></div>
+  </form>
 
-    <button class="generate" id="generate">Generate</button>
-  </body>
+  <button class="generate" id="generate">Generate</button>
+
+  <div id="vis" style="display: none;">
+    <div id="show" class="show">
+
+    </div>
+
+    <h2>Summary</h2>
+
+    <table class="table">
+      <thead>
+        <tr class="hrow">
+          <th class="">Name</th>
+          <th>Arrival</th>
+          <th>Done</th>
+          <th>TAT</th>
+          <th>Wait</th>
+          <th>RT</th>
+        </tr>
+      </thead>
+
+      <tbody id="tbody">
+      </tbody>
+    </table>
+
+    <div class="equ">
+      <div>Average TAT: <span id="tat">-1</span></div>
+      <div>Average WT: <span id="wt">-1</span></div>
+      <div>Average RT: <span id="rt">-1</span></div>
+      <div>CPU Utilization: <span id="uti">-1</span>%</div>
+    </div>
+  </div>
+
+</body>
+
 </html>
 
 <style>
+  h2 {
+    margin-top: 20rem;
+    font-size: 4rem;
+    text-align: center;
+  }
+
+  .equ {
+    line-height: 4rem;
+    text-align: center;
+    margin-top: 10rem;
+    font-size: 2rem;
+  }
+
+  table {
+    margin-top: 5rem;
+    width: 80%;
+    margin-inline: auto;
+    border-radius: 1.5rem;
+    border-radius: 1.5rem !important;
+    overflow: hidden;
+    padding: 0;
+    border-spacing: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    border-collapse: separate;
+  }
+
+  th,
+  td {
+    border-inline: 0.0125rem solid white;
+  }
+
+  th:first-child,
+  td:first-child {
+    border-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: 0;
+  }
+
+  tr>td {
+    border-top: 0.125rem solid white
+  }
+
+  .hrow {
+    height: 4rem;
+    background-color: #382bf0;
+  }
+
+  .brow {
+    height: 4rem;
+    background-color: #0E8388;
+  }
+
+  .show {
+    margin-top: 20rem;
+    display: flex;
+    width: 80%;
+    margin-inline: auto;
+    padding-left: 0.25rem;
+    padding-right: -0.25rem;
+    flex-wrap: wrap;
+    row-gap: 20rem;
+  }
+
+  .item {
+    position: relative;
+    border: solid 0.125rem white;
+    height: 4rem;
+    width: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background-color: #0E8388;
+    margin-left: -0.25rem;
+  }
+
+  .init {
+    font-size: 1.75rem;
+    position: absolute;
+    top: -10.5rem;
+    left: -4.05rem;
+    background-color: #121212;
+    width: 8rem;
+    text-align: center;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+
+  .init2 {
+    font-size: 1.75rem;
+    position: absolute;
+    top: -10.5rem;
+    right: -4.2rem;
+    /* background-color: red; */
+    width: 8rem;
+    text-align: center;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+
+  .arrow {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    transform: rotate(90deg);
+    margin-inline: auto;
+    display: block;
+  }
+
+  .over {
+    font-size: 1.25rem;
+    position: absolute;
+    bottom: -6.9rem;
+    right: -3.95rem;
+    /* background-color: green; */
+    width: 8rem;
+    text-align: center;
+    z-index: 1;
+  }
+
   body {
-    background-color: rgb(26, 26, 26);
+    background-color: #121212;
     padding-top: 10rem;
     color: white;
     padding-bottom: 10rem;
@@ -49,42 +219,49 @@
   }
 
   .initial {
-    padding-inline: 15rem;
+    width: 80%;
+    margin-inline: auto;
     display: flex;
     justify-content: space-between;
     gap: 5rem;
     margin-top: 8rem;
   }
 
+  .puts {
+    display: flex;
+    gap: 1rem;
+  }
+
   .label {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     display: block;
     text-align: center;
   }
 
   .input {
     height: 3rem;
-    width: 20rem;
+    width: 16rem;
     border-radius: 3rem;
-    background-color: #272ab0;
+    background-color: #382bf0;
     outline: 0;
     color: white;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border: 0;
-    padding-inline: 1rem;
-    border: solid 0.25rem white;
+    padding-inline: 1.5rem;
+    border: solid 0.125rem white;
     margin-top: 0.5rem;
   }
+
 
   .add {
     height: 4rem;
     width: 4rem;
     border-radius: 3rem;
-    background-color: #272ab0;
+    background-color: #382bf0;
     align-self: end;
     position: relative;
     cursor: pointer;
-    border: solid 0.25rem white;
+    border: solid 0.125rem white;
   }
 
   .hori {
@@ -116,14 +293,15 @@
 
   .hprocess {
     height: 3rem;
-    margin-inline: 15rem;
+    width: 80%;
+    margin-inline: auto;
     border-radius: 3rem;
     margin-top: 2rem;
     background-color: white;
-    color: #272ab0;
+    color: #382bf0;
     display: flex;
-    font-size: 1rem;
-    border: solid 0.25rem #272ab0;
+    font-size: 1.5rem;
+    border: solid 0.125rem #382bf0;
     font-weight: bold;
   }
 
@@ -131,66 +309,70 @@
     width: calc(100% / 3);
     display: flex;
     align-items: center;
-    padding-inline: 1rem;
+    padding-inline: 1.5rem;
   }
 
   .hmid {
     width: calc(100% / 3);
     display: flex;
     align-items: center;
-    padding-inline: 1rem;
-    border-inline: solid 0.25rem #272ab0;
+    padding-inline: 1.5rem;
+    border-inline: solid 0.125rem #382bf0;
   }
 
   .hend {
     width: calc(100% / 3);
     display: flex;
     align-items: center;
-    padding-inline: 1rem;
+    padding-inline: 1.5rem;
   }
 
   .process {
     position: relative;
     height: 3rem;
-    margin-inline: 15rem;
+    width: 80%;
+    margin-inline: auto;
     border-radius: 3rem;
     margin-top: 1rem;
-    background-color: #272ab0;
-    border: solid 0.25rem white;
+    background-color: #382bf0;
+    border: solid 0.125rem white;
     display: flex;
-    font-size: 1rem;
+    font-size: 1.5rem;
     overflow: hidden;
   }
 
   .first {
+    font-size: 1.5rem;
     height: 100%;
     box-sizing: border-box;
     width: calc(100% / 3);
-    padding-inline: 1rem;
-    background-color: #272ab0;
+    padding-inline: 1.5rem;
+    background-color: #382bf0;
     color: white;
     outline: 0;
     border: 0;
   }
 
   .mid {
+    font-size: 1.5rem;
     height: 100%;
     box-sizing: border-box;
     width: calc(100% / 3);
-    padding-inline: 1rem;
-    background-color: #272ab0;
+    padding-inline: 1.5rem;
+    background-color: #382bf0;
     border: 0;
-    border-inline: solid 0.25rem white;
+    border-inline: solid 0.125rem white;
     color: white;
     outline: 0;
   }
 
   .end {
+    font-size: 1.5rem;
     height: 100%;
     box-sizing: border-box;
     width: calc(100% / 3);
-    padding-inline: 1rem;
-    background-color: #272ab0;
+    padding-inline: 1.5rem;
+    background-color: #382bf0;
     color: white;
     outline: 0;
     border: 0;
@@ -203,7 +385,7 @@
     width: 3rem;
     background-color: #ff0000;
     cursor: pointer;
-    border-left: solid 0.25rem white;
+    border-left: solid 0.125rem white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -219,15 +401,15 @@
   }
 
   .generate {
-    height: 3rem;
+    height: 3.5rem;
     width: 20rem;
     border-radius: 3rem;
-    background-color: #272ab0;
+    background-color: #382bf0;
     color: white;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border: 0;
     padding-inline: 1rem;
-    border: solid 0.25rem white;
+    border: solid 0.125rem white;
     margin-top: 2rem;
     margin-inline: auto;
     display: block;
@@ -239,7 +421,9 @@
   let list = [];
   let id = 0;
 
-  document.getElementById("add").addEventListener("click", () => {
+  const add = () => {
+    save()
+
     list.push({
       id: id,
       name: "",
@@ -247,12 +431,15 @@
       process: "",
     });
 
-    let temp = `
+    document.getElementById("list").innerHTML = "";
+
+    for (let x of list) {
+      let temp = `
     <div class="process">
-      <input id="name${id}" class="first" placeholder="Enter name" />
-      <input id="period${id}" class="mid" placeholder="Enter period" />
-      <input id="burst${id}" class="end" placeholder="Enter burst time" />
-      <div class="delete">
+      <input id="name${x.id}" class="first" placeholder="Enter name" value="${x.name}"/>
+      <input id="period${x.id}" class="mid" placeholder="Enter repeat cycle" value="${x.period}"/>
+      <input id="burst${x.id}" class="end" placeholder="Enter burst time" value="${x.process}"/>
+      <div id="delete${x.id}" class="delete" onclick="remove(${x.id})">
 
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -266,14 +453,44 @@
     </div>
     `;
 
-    document.getElementById("list").innerHTML += temp;
+      document.getElementById("list").innerHTML += temp;
+    }
 
     id++;
+  };
 
-    console.log(list);
-  });
+  const remove = (item) => {
+    save()
 
-  document.getElementById("generate").addEventListener("click", () => {
+    list = list.filter(x => x.id != item)
+    document.getElementById("list").innerHTML = "";
+
+    for (let x of list) {
+      let temp = `
+    <div class="process">
+      <input id="name${x.id}" class="first" placeholder="Enter name" value="${x.name}"/>
+      <input id="period${x.id}" class="mid" placeholder="Enter repeat cycle" value="${x.period}"/>
+      <input id="burst${x.id}" class="end" placeholder="Enter burst time" value="${x.process}"/>
+      <div id="delete${x.id}" class="delete" onclick="remove(${x.id})">
+
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.85 9.14001L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79002C6.00002 22 5.91002 20.78 5.80002 19.21L5.15002 9.14001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.33 16.5H13.66" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9.5 12.5H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+      </div>
+    </div>
+    `;
+
+      document.getElementById("list").innerHTML += temp;
+    }
+
+  }
+
+  const save = () => {
     let i = 0;
     for (let item of document.getElementsByClassName("first")) {
       list[i].name = item.value;
@@ -291,7 +508,247 @@
       list[i].process = item.value;
       i++;
     }
+  }
 
-    console.log(list)
+  document.getElementById("generate").addEventListener("click", () => {
+    save()
+
+    let quantom = Number(document.getElementById("quantom").value)
+    let maxTime = Number(document.getElementById("max").value)
+
+    list = list.map(x => {
+      return {
+        id: x.id,
+        name: x.name,
+        period: Number(x.period),
+        process: Number(x.process),
+      }
+    })
+
+
+
+    let indexes = []
+
+    for (let x of list) {
+      indexes.push({
+        id: x.id,
+        index: 1
+      })
+    }
+
+    let line = []
+
+    let show = []
+
+    let done = []
+
+    let moment = 0
+
+    for (let x of list) {
+      line.push({
+        id: x.id,
+        name: x.name + indexes.filter(y => y.id == x.id)[0].index,
+        time: x.process,
+        init: 0,
+        wait: 0,
+        over: -1,
+        response: -1
+      })
+
+      indexes[indexes.findIndex(y => y.id == x.id)].index++
+    }
+
+    let qua = quantom
+
+    while (true) {
+
+      if (line.length) {
+        qua--
+
+        show.push({ ...line.shift() })
+        for (let w of line) {
+          w.wait++
+        }
+
+        show[show.length - 1].time--
+        if (show[show.length - 1].response == -1) show[show.length - 1].response = moment - show[show.length - 1].init
+
+        if (show[show.length - 1].time) {
+          if (qua) line.unshift({ ...show[show.length - 1] })
+          else {
+            line.push({ ...show[show.length - 1] })
+            qua = quantom
+          }
+        }
+
+        else {
+          show[show.length - 1].over = moment + 1
+          done.push({ ...show[show.length - 1] })
+          qua = quantom
+        }
+      }
+      else {
+        show.push({
+          id: -1,
+          name: "",
+          time: -1,
+          init: -1,
+          wait: -1,
+          over: -1,
+          response: -1
+        })
+      }
+
+      moment++
+      for (let x of list) {
+        if (moment % x.period == 0) {
+          line.push({
+            id: x.id,
+            name: x.name + indexes.filter(y => y.id == x.id)[0].index,
+            time: x.process,
+            init: moment,
+            wait: 0,
+            over: -1,
+            response: -1
+          })
+
+          indexes[indexes.findIndex(y => y.id == x.id)].index++
+        }
+      }
+      console.log({ ...list })
+      console.log({ ...line })
+      console.log({ ...show })
+      console.log({ ...indexes })
+      console.log({ ...done })
+      console.log("-------------------------------------------")
+
+
+      let flag = false
+      if (line.length == list.length) {
+        flag = true
+        let num = 0
+        for (let q of line) {
+          if (q.id != list[num].id) {
+            flag = false
+            break
+          }
+
+
+          if (q.time != list[num].process) {
+            flag = false
+            break
+          }
+
+
+          if (q.wait != 0) {
+            flag = false
+            break
+          }
+
+          num++
+        }
+      }
+
+      if (flag) break
+      if (moment == maxTime || !maxTime) break
+    }
+
+    document.getElementById("show").innerHTML = ""
+
+    let clk = 0
+    for (let s of show) {
+
+      console.log(done.filter(x => x.init == clk).toString())
+      let temp = `
+      <div class="item" ${(s.name) ? '' : 'style="background-color: gray;"'}>
+      <div class="init">
+
+        <div ${(done.filter(x => x.init == clk)[0]) ? '' : 'style="display: none;"'}>${done.filter(x => x.init == clk).map(x => x.name).join(', ')}</div>
+
+        <svg ${(done.filter(x => x.init == clk)[0]) ? '' : 'style="display: none;"'} class="arrow" fill="white" height="2.5rem" width="2.5rem" version="1.1" id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330"
+          xml:space="preserve">
+          <path id="XMLID_27_" d="M15,180h263.787l-49.394,49.394c-5.858,5.857-5.858,15.355,0,21.213C232.322,253.535,236.161,255,240,255
+          s7.678-1.465,10.606-4.394l75-75c5.858-5.857,5.858-15.355,0-21.213l-75-75c-5.857-5.857-15.355-5.857-21.213,0
+          c-5.858,5.857-5.858,15.355,0,21.213L278.787,150H15c-8.284,0-15,6.716-15,15S6.716,180,15,180z" />
+        </svg>
+
+        <div>${clk}</div>
+
+      </div>
+
+      <div class="init2">
+
+        <div ${(done.filter(x => x.init == clk + 1)[0]) ? '' : 'style="display: none;"'}>${done.filter(x => x.init == clk + 1).map(x => x.name).join(', ')}</div>
+
+        <svg ${(done.filter(x => x.init == clk + 1)[0]) ? '' : 'style="display: none;"'} class="arrow" fill="white" height="2.5rem" width="2.5rem" version="1.1" id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330"
+          xml:space="preserve">
+          <path id="XMLID_27_" d="M15,180h263.787l-49.394,49.394c-5.858,5.857-5.858,15.355,0,21.213C232.322,253.535,236.161,255,240,255
+          s7.678-1.465,10.606-4.394l75-75c5.858-5.857,5.858-15.355,0-21.213l-75-75c-5.857-5.857-15.355-5.857-21.213,0
+          c-5.858,5.857-5.858,15.355,0,21.213L278.787,150H15c-8.284,0-15,6.716-15,15S6.716,180,15,180z" />
+        </svg>
+
+        <div>${clk + 1}</div>
+
+      </div>
+
+      <div class="over" ${(s.over == -1) ? 'style="display: none;"' : ''}>
+        <svg class="svg-icon" style="width: 2.25rem; height: 2.25rem;vertical-align: middle;fill: red;overflow: hidden;"
+          viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M810.65984 170.65984q18.3296 0 30.49472 12.16512t12.16512 30.49472q0 18.00192-12.32896 30.33088l-268.67712 268.32896 268.67712 268.32896q12.32896 12.32896 12.32896 30.33088 0 18.3296-12.16512 30.49472t-30.49472 12.16512q-18.00192 0-30.33088-12.32896l-268.32896-268.67712-268.32896 268.67712q-12.32896 12.32896-30.33088 12.32896-18.3296 0-30.49472-12.16512t-12.16512-30.49472q0-18.00192 12.32896-30.33088l268.67712-268.32896-268.67712-268.32896q-12.32896-12.32896-12.32896-30.33088 0-18.3296 12.16512-30.49472t30.49472-12.16512q18.00192 0 30.33088 12.32896l268.32896 268.67712 268.32896-268.67712q12.32896-12.32896 30.33088-12.32896z" />
+        </svg>
+
+        <div>Arrival: ${s.init}</div>
+        <div>TAT: ${s.over - s.init}</div>
+        <div>Wait: ${s.wait}</div>
+        <div>RT: ${s.response}</div>
+      </div>
+
+      ${(s.name) ? s.name : '-'}
+    </div>
+      `
+
+      document.getElementById("show").innerHTML += temp
+
+      clk++
+    }
+
+    let WT = 0
+    let TAT = 0
+    let RT = 0
+    document.getElementById("tbody").innerHTML = ""
+    for (let d of done) {
+      let temp = `
+      <tr class="brow">
+        <td>${d.name}</td>
+        <td>${d.init}</td>
+        <td>${d.over}</td>
+        <td>${d.over - d.init}</td>
+        <td>${d.wait}</td>
+        <td>${d.response}</td>
+      </tr>
+      `
+
+      document.getElementById("tbody").innerHTML += temp
+
+      WT += d.wait
+      TAT += (d.over - d.init)
+      RT += d.response
+    }
+
+    WT /= done.length
+    TAT /= done.length
+    RT /= done.length
+
+    let uti = (show.filter(x => x.id != -1).length / show.length) * 100
+
+    document.getElementById("tat").innerHTML = TAT
+    document.getElementById("wt").innerHTML = WT
+    document.getElementById("rt").innerHTML = RT
+    document.getElementById("uti").innerHTML = uti
+
+    document.getElementById("vis").style.display = "block"
   });
 </script>
